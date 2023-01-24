@@ -1,5 +1,7 @@
 const operation = require("./products");
 const path = require("path");
+
+console.log(process.cwd());
 // {
 //     deleteProduct: [AsyncFunction: deleteProduct],
 //     updateById: [AsyncFunction: updateById],
