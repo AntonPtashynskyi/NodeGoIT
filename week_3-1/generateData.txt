@@ -1,0 +1,11 @@
+ const prod = ["kiwi", "mango", "cheese", "brad", "oil", "candy"]\
+ 
+ for (let i = 0; i < 100; i++) {
+   let name = prod[Math.floor(Math.random() * prod.length)];
+   db.products.insert({
+     name,
+     code: Math.floor(100000 + Math.random() * 9000),
+     price: Math.floor(Math.random() * 1 * 98) / 100,
+     available: !Math.round(Math.random()),
+   });
+ }
