@@ -2,9 +2,11 @@ const express = require("express");
 const logger = require("morgan");
 const app = express();
 const sweetsRouter = require("./product-rest-api/routes/api/products");
+const authRouter = require("./product-rest-api/routes/api/auth");
 
 app.use(express.json(), logger("dev"));
 
+app.use("/api/v1/auth", authRouter);
 app.use("/api/v1/products", sweetsRouter);
 
 app.use((req, res, next) => {
