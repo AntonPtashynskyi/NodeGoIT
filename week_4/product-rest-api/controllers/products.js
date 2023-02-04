@@ -3,7 +3,7 @@ const { createError } = require("../../errors");
 
 const getAll = async (req, res, next) => {
   try {
-    const all = await productsService.getAll();
+    const all = await productsService.getAll(req.query);
     emailsService.sendEmail();
     res.json(all);
   } catch (error) {
