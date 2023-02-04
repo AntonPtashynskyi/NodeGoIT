@@ -18,11 +18,18 @@ const schema = new Schema({
     type: Number,
     required: true,
   },
+  createdBy: {
+    ref: "auth",
+    type: Schema.Types.ObjectId,
+    required: true,
+  },
 });
 
 const schemeCreate = Joi.object({
   price: Joi.number().min(0).required(),
-  name: Joi.string().min(3).required,
+  name: Joi.string().min(3).required(),
+  code: Joi.number(),
+  available: Joi.boolean(),
 });
 
 const schemePathAvailable = Joi.object({

@@ -1,6 +1,8 @@
 const { User } = require("../models/user");
 const { createError } = require("../../errors");
 const bcrypt = require("bcryptjs");
+const jwt = require("jsonwebtoken");
+const { SECRET_KEY } = require("../helpers/env");
 
 const registerUser = async (userData) => {
   const result = await User.findOne({ email: userData.email });
@@ -16,6 +18,47 @@ const registerUser = async (userData) => {
   return user;
 };
 
+const loginUser = async ({ email, password }) => {
+  const user = await User.findOne({ email });
+  if (!user) {
+    throw createError(401, "Pleas enter valid login or password");
+  }
+  const isValid = await bcrypt.compare(password, user.password);
+
+  if (!isValid) {
+    throw createError(401, "Pleas enter valid login or password");
+  }
+
+  const payload = {
+    id: user._id,
+    role: user.role,
+  };
+
+  const token = jwt.sign(payload, SECRET_KEY, { expiresIn: "1h" });
+  await User.findByIdAndUpdate(user.id, { token });
+
+  return {
+    token,
+  };
+};
+
+const logOutUser = async (id) => {
+  await User.findByIdAndUpdate(id, { token: null });
+};
+
+const authenticateUser = async (token) => {
+  try {
+    const payload = jwt.verify(token, SECRET_KEY);
+    const { id } = payload;
+    return await User.findById(id);
+  } catch (error) {
+    return null;
+  }
+};
+
 module.exports = {
   registerUser,
+  loginUser,
+  authenticateUser,
+  logOutUser,
 };

@@ -1,6 +1,7 @@
 const express = require("express");
 const { schemeCreate, schemePathAvailable } = require("../../models/product");
 const { validateRequest } = require("../../middlewares/validator");
+const { auth, author } = require("../../middlewares/auth");
 const {
   getAll,
   getById,
@@ -12,11 +13,11 @@ const {
 
 const router = express.Router();
 
-router.get("/", getAll);
+router.get("/", auth, getAll);
 router.get("/:id", getById);
-router.post("/", create);
+router.post("/", validateRequest(schemeCreate), auth, create);
 router.put("/:id", updateById);
 router.patch("/:id", validateRequest(schemePathAvailable), updateAvailability);
-router.delete("/:id", deleteById);
+router.delete("/:id", auth, author("admin"), deleteById);
 
 module.exports = router;

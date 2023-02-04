@@ -1,15 +1,15 @@
 const { Product } = require("../models/product");
 
 const getAll = async () => {
-  return Product.find();
+  return Product.find({}, {}, {}).populate("createdBy", "name, role");
 };
 
 const getById = async (id) => {
   return Product.findById(id);
 };
 
-const create = async (product) => {
-  return Product.create(product);
+const create = async (product, id) => {
+  return Product.create({ ...product, createdBy: id });
 };
 
 const updateById = async (id, product) => {

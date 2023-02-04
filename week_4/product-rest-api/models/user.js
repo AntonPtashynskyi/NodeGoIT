@@ -1,5 +1,6 @@
 const { Schema, model } = require("mongoose");
 const Joi = require("joi");
+const { token } = require("morgan");
 
 const authSchema = new Schema(
   {
@@ -21,6 +22,10 @@ const authSchema = new Schema(
       enum: ["admin", "employee"],
       default: "employee",
     },
+    token: {
+      type: String,
+      default: null,
+    },
   },
   { timestamps: true }
 );
@@ -35,9 +40,15 @@ const schemaRegister = Joi.object({
   role: Joi.string().valid("admin", "employee"),
 });
 
+const schemaLogin = Joi.object({
+  email: Joi.string().required(),
+  password: Joi.string().min(6).required(),
+});
+
 module.exports = {
   User,
   schemaRegister,
+  schemaLogin,
 };
 
 // phone    : { type: String,/*not required by default**/

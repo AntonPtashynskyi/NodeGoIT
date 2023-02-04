@@ -27,13 +27,8 @@ const getById = async (req, res, next) => {
 
 const create = async (req, res, next) => {
   try {
-    // const { error } = scheme.validate(req.body);
-    // if (error) {
-    //   throw createError(400, error.message);
-    // }
-    // const { price, name } = req.body;
-    console.log(req.body);
-    const product = await productsService.create(req.body);
+    const { _id } = req.user;
+    const product = await productsService.create(req.body, _id);
     res.status(201).json(product);
   } catch (error) {
     next(error);
