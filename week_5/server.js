@@ -14,6 +14,6 @@ mongoose
     console.log(`Server start at port ${PORT}`);
   })
   .catch((e) => {
-    console.log("Error >>>", e);
+    console.log("Error >>>>", e);
     process.exit(1);
   });
