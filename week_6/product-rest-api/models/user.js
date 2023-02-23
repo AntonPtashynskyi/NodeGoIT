@@ -2,6 +2,7 @@ const { Schema, model } = require("mongoose");
 const Joi = require("joi");
 const { token } = require("morgan");
 const gravatar = require("gravatar");
+const { v4 } = require("uuid");
 
 const authSchema = new Schema(
   {
@@ -37,6 +38,17 @@ const authSchema = new Schema(
         );
       },
     },
+    verify: {
+      type: Boolean,
+      default: false,
+    },
+    verificationToken: {
+      type: String,
+      default: function () {
+        return v4();
+      },
+      required: [true, "Verify token is required"],
+    },
   },
   { timestamps: true }
 );
@@ -61,12 +73,3 @@ module.exports = {
   schemaRegister,
   schemaLogin,
 };
-
-// phone    : { type: String,/*not required by default**/
-//             validate: {
-//                 validator: function(v) {
-//                     var re = /^\d{10}$/;
-//                     return (!v || !v.trim().length) || re.test(v)
-//                 },
-//                 message: 'Provided phone number is invalid.'
-//             }
