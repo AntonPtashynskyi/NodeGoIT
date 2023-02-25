@@ -18,14 +18,14 @@ const sendEmail = async (userEmail, verificationToken) => {
 
   try {
     const result = await sgMail.send(msg);
-
-    console.log("result >>>>", result);
     // .then(() => {
     //   console.log("Email sent");
     // })
     // .catch((error) => {
     //   console.error(error);
     // });
+
+    console.log("result >>>>", result);
   } catch (error) {
     console.log("Error >>>", error);
     throw error;

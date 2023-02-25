@@ -1,4 +1,10 @@
-const { registerUser, logOutUser, loginUser, verifyEmail } = require("./auth");
+const {
+  registerUser,
+  logOutUser,
+  loginUser,
+  verifyEmail,
+  resendEmail,
+} = require("./auth");
 const {
   create,
   deleteById,
@@ -12,6 +18,7 @@ module.exports = {
   logOutUser,
   loginUser,
   verifyEmail,
+  resendEmail,
   create,
   deleteById,
   getAll,

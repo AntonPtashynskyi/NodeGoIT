@@ -55,7 +55,6 @@ const authSchema = new Schema(
 
 const User = model("auth", authSchema);
 
-// .regex(^[^s@]+@[^s@]+.[^s@]+$")
 const schemaRegister = Joi.object({
   name: Joi.string().min(3).max(12).required(),
   email: Joi.string().required(),
@@ -68,8 +67,13 @@ const schemaLogin = Joi.object({
   password: Joi.string().min(6).required(),
 });
 
+const schemaConfirmEmail = Joi.object({
+  email: Joi.string().required(),
+});
+
 module.exports = {
   User,
   schemaRegister,
   schemaLogin,
+  schemaConfirmEmail,
 };

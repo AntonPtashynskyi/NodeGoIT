@@ -65,9 +65,35 @@ const verifyEmail = async (req, res, next) => {
   }
 };
 
+const resendEmail = async (req, res, next) => {
+  try {
+    const { email } = req.body;
+    const user = await userService.findUserByOneFilter({ email });
+    console.log("USER >>>>>>", user);
+    console.log("USER IS TRUE", user.verify);
+
+    if (!user) {
+      throw createError(404, "User Not found");
+    }
+    if (user.verify === true) {
+      throw createError(400, "Verification has already been passed");
+    }
+
+    const result = await emailsService.sendEmail(
+      user.email,
+      user.verificationToken
+    );
+
+    return res.status(200).json({ message: "Mail is send" });
+  } catch (error) {
+    next(error);
+  }
+};
+
 module.exports = {
   registerUser,
   loginUser,
   logOutUser,
   verifyEmail,
+  resendEmail,
 };
