@@ -43,15 +43,20 @@ const loginUser = async ({ email, password }) => {
 };
 
 const logOutUser = async (id) => {
-  await User.findByIdAndUpdate(id, { token: null });
+  return await User.findByIdAndUpdate(id, { token: null }, { new: true });
 };
 
 const authenticateUser = async (token) => {
   try {
-    // ! TODO verify Equality tokens from "req" and stored in "DB" tokens.
     const payload = jwt.verify(token, SECRET_KEY);
     const { id } = payload;
-    return await User.findById(id);
+    const user = await User.findById(id);
+    if (user?.token !== token) {
+      return null;
+    }
+    return user;
+
+    return;
   } catch (error) {
     return null;
   }

@@ -6,7 +6,6 @@ const registerUser = async (req, res, next) => {
   try {
     const user = await authService.registerUser(req.body);
     const { name, email, role, id, avatarUrl, verificationToken } = user;
-    console.log("user >>>>>>", user);
 
     await emailsService.sendEmail(email, verificationToken);
 
@@ -35,19 +34,20 @@ const loginUser = async (req, res, next) => {
 
 const logOutUser = async (req, res, next) => {
   try {
-    await authService.logOutUser(req.user._id);
-    res.status(204);
+    const response = await authService.logOutUser(req.user._id);
+    if (!response) {
+      throw createError(500, "Something went wrong on server");
+    }
+    res.status(204).json({ message: "User was logout" });
   } catch (error) {
     next(error);
   }
 };
 
 const verifyEmail = async (req, res, next) => {
-  console.log("req!!!!>>>>", req);
   try {
     const { verificationToken } = req.params;
     const user = await userService.findUserByOneFilter({ verificationToken });
-    console.log("user>>>>>> ", user);
 
     if (!user) {
       throw createError(404, "User Not found");

@@ -2,6 +2,10 @@ const { createError } = require("../../errors");
 const { authenticateUser } = require("../services/auth.service");
 
 const auth = async (req, res, next) => {
+  if (!req.headers.authorization) {
+    next(createError(401, "Token should be provided"));
+  }
+
   const { authorization = "" } = req.headers;
   const [bearer, token] = authorization.split(" ");
 
