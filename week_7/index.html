@@ -1,0 +1,54 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+</head>
+<body>
+    <h1>Chat</h1>
+    <input type="text" id="message">
+    <div id="chat"></div>
+
+    <script>
+        const CHAR = 13;
+        const socket = new WebSocket('ws://localhost:5500');
+
+        const chat = document.getElementById("chat")
+        const msg = document.getElementById("message")
+
+        msg.focus();
+
+        const writeLine = (text) => {
+            const line = document.createElement("div");
+            line.innerHTML = `<p>${text}</p>`
+            chat.appendChild(line)
+        }
+
+        socket.addEventListener('open', () => {
+            writeLine("connected")
+        })
+
+        socket.addEventListener('close', () => {
+            writeLine("closed")
+        })
+
+        socket.addEventListener('message', ({data}) => {
+            writeLine(data)
+        })
+
+        msg.addEventListener('keydown', (e) => {
+            if(msg.value.length === 0) return
+            if(e.keyCode === CHAR) {
+                const s = msg.value;
+                writeLine(s);
+                msg.value = "";
+                socket.send(s)
+            }
+        })
+        
+    </script>
+    
+</body>
+</html>
